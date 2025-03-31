@@ -445,6 +445,7 @@ src="/_sphinx/documentation_options.js"></script>
                 <span class="n">gen_args</span> <span class="o">=</span> <span class="n">DEFAULT_GEN_ARGS</span>
 
             <span class="n">model_inp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_model_input</span><span class="p">(</span><span class="n">inp</span><span class="o">.</span><span class="n">to_model_input</span><span class="p">())</span>
+            <span class="c1"># pyre-fixme[29]: `Union[Module, Tensor]` is not a function.</span>
             <span class="n">output_tokens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">model_inp</span><span class="p">,</span> <span class="o">**</span><span class="n">gen_args</span><span class="p">)</span>
             <span class="n">target_tokens</span> <span class="o">=</span> <span class="n">output_tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">model_inp</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">:]</span>
         <span class="k">else</span><span class="p">:</span>
@@ -601,10 +602,19 @@ src="/_sphinx/documentation_options.js"></script>
                         <span class="n">outputs</span><span class="o">.</span><span class="n">past_key_values</span> <span class="o">=</span> <span class="n">DynamicCache</span><span class="o">.</span><span class="n">from_legacy_cache</span><span class="p">(</span>
                             <span class="n">outputs</span><span class="o">.</span><span class="n">past_key_values</span>
                         <span class="p">)</span>
-                    <span class="n">model_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_update_model_kwargs_for_generation</span><span class="p">(</span>
+                    <span class="c1"># nn.Module typing suggests non-base attributes are modules or</span>
+                    <span class="c1"># tensors</span>
+                    <span class="n">_update_model_kwargs_for_generation</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_update_model_kwargs_for_generation</span>
+                    <span class="p">)</span>
+                    <span class="c1"># pyre-fixme[29]: `Union[Module, Tensor]` is not a function.</span>
+                    <span class="n">model_kwargs</span> <span class="o">=</span> <span class="n">_update_model_kwargs_for_generation</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
                         <span class="n">outputs</span><span class="p">,</span> <span class="n">model_kwargs</span>
                     <span class="p">)</span>
-                <span class="n">model_inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">prepare_inputs_for_generation</span><span class="p">(</span>
+                <span class="c1"># nn.Module typing suggests non-base attributes are modules or tensors</span>
+                <span class="n">prep_inputs_for_generation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">prepare_inputs_for_generation</span>
+                <span class="c1"># pyre-fixme[29]: `Union[Module, Tensor]` is not a function.</span>
+                <span class="n">model_inputs</span> <span class="o">=</span> <span class="n">prep_inputs_for_generation</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
                     <span class="n">model_inp</span><span class="p">,</span> <span class="o">**</span><span class="n">model_kwargs</span>
                 <span class="p">)</span>
                 <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="o">**</span><span class="n">model_inputs</span><span class="p">)</span>
@@ -989,7 +999,7 @@ src="/_sphinx/documentation_options.js"></script>
 </div>
 </div>
 <div class="clearer"></div>
-</div></div></div><footer class="nav-footer" id="footer"><section class="sitemap"><div class="footerSection"><h5>Docs</h5><a href="/docs/introduction">Introduction</a><a href="/docs/getting_started">Getting Started</a><a href="/tutorials/">Tutorials</a><a href="/api/">API Reference</a></div><div class="footerSection"><h5>Legal</h5><a href="https://opensource.facebook.com/legal/privacy/" target="_blank" rel="noreferrer noopener">Privacy</a><a href="https://opensource.facebook.com/legal/terms/" target="_blank" rel="noreferrer noopener">Terms</a></div><div class="footerSection"><h5>Social</h5><div class="social"><a class="github-button" href="https://github.com/pytorch/captum" data-count-href="https://github.com/pytorch/captum/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star Captum on GitHub">captum</a></div></div></section><a href="https://opensource.facebook.com/" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/img/oss_logo.png" alt="Facebook Open Source" width="170" height="45"/></a><section class="copyright"> Copyright © 2024 Facebook Inc.</section><script>
+</div></div></div><footer class="nav-footer" id="footer"><section class="sitemap"><div class="footerSection"><h5>Docs</h5><a href="/docs/introduction">Introduction</a><a href="/docs/getting_started">Getting Started</a><a href="/tutorials/">Tutorials</a><a href="/api/">API Reference</a></div><div class="footerSection"><h5>Legal</h5><a href="https://opensource.facebook.com/legal/privacy/" target="_blank" rel="noreferrer noopener">Privacy</a><a href="https://opensource.facebook.com/legal/terms/" target="_blank" rel="noreferrer noopener">Terms</a></div><div class="footerSection"><h5>Social</h5><div class="social"><a class="github-button" href="https://github.com/pytorch/captum" data-count-href="https://github.com/pytorch/captum/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star Captum on GitHub">captum</a></div></div></section><a href="https://opensource.facebook.com/" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/img/oss_logo.png" alt="Facebook Open Source" width="170" height="45"/></a><section class="copyright"> Copyright © 2025 Facebook Inc.</section><script>
             (function() {
               var BAD_BASE = '/captum/';
               if (window.location.origin !== 'https://captum.ai') {

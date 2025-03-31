@@ -447,6 +447,7 @@ src="/_sphinx/documentation_options.js"></script>
 <span class="sd">        set necessary hooks on inputs there.</span>
 <span class="sd">        """</span>
         <span class="n">inputs</span> <span class="o">=</span> <span class="n">_format_tensor_into_tuples</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+        <span class="c1"># pyre-fixme[16]: `Module` has no attribute `input`.</span>
         <span class="n">module</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_forward_hook</span><span class="p">(</span>
@@ -460,6 +461,7 @@ src="/_sphinx/documentation_options.js"></script>
 <span class="sd">        outputs of a neuron</span>
 <span class="sd">        """</span>
         <span class="n">outputs</span> <span class="o">=</span> <span class="n">_format_tensor_into_tuples</span><span class="p">(</span><span class="n">outputs</span><span class="p">)</span>
+        <span class="c1"># pyre-fixme[16]: `Module` has no attribute `output`.</span>
         <span class="n">module</span><span class="o">.</span><span class="n">output</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_backward_hook</span><span class="p">(</span>
@@ -561,8 +563,6 @@ src="/_sphinx/documentation_options.js"></script>
                         <span class="n">additional_args</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">ExpansionTypes</span><span class="o">.</span><span class="n">repeat</span>
                     <span class="p">),</span>
                 <span class="p">)</span>
-                <span class="c1"># pyre-fixme[60]: Concatenation not yet support for multiple</span>
-                <span class="c1">#  variadic tuples: `*baseline_input_tsr, *expanded_additional_args`.</span>
                 <span class="k">return</span> <span class="p">(</span><span class="o">*</span><span class="n">baseline_input_tsr</span><span class="p">,</span> <span class="o">*</span><span class="n">expanded_additional_args</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">baseline_input_tsr</span>
 
@@ -576,6 +576,8 @@ src="/_sphinx/documentation_options.js"></script>
         <span class="p">):</span>
             <span class="k">return</span> <span class="p">[</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">register_forward_pre_hook</span><span class="p">(</span><span class="n">pre_hook</span><span class="p">),</span>  <span class="c1"># type: ignore</span>
+                <span class="c1"># pyre-fixme[16]: Item `Tensor` of `Tensor | Module` has no</span>
+                <span class="c1">#  attribute `register_forward_hook`.</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">register_forward_hook</span><span class="p">(</span><span class="n">forward_hook</span><span class="p">),</span>
             <span class="p">]</span>  <span class="c1"># type: ignore</span>
         <span class="k">else</span><span class="p">:</span>
@@ -1182,7 +1184,7 @@ src="/_sphinx/documentation_options.js"></script>
 </div>
 </div>
 <div class="clearer"></div>
-</div></div></div><footer class="nav-footer" id="footer"><section class="sitemap"><div class="footerSection"><h5>Docs</h5><a href="/docs/introduction">Introduction</a><a href="/docs/getting_started">Getting Started</a><a href="/tutorials/">Tutorials</a><a href="/api/">API Reference</a></div><div class="footerSection"><h5>Legal</h5><a href="https://opensource.facebook.com/legal/privacy/" target="_blank" rel="noreferrer noopener">Privacy</a><a href="https://opensource.facebook.com/legal/terms/" target="_blank" rel="noreferrer noopener">Terms</a></div><div class="footerSection"><h5>Social</h5><div class="social"><a class="github-button" href="https://github.com/pytorch/captum" data-count-href="https://github.com/pytorch/captum/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star Captum on GitHub">captum</a></div></div></section><a href="https://opensource.facebook.com/" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/img/oss_logo.png" alt="Facebook Open Source" width="170" height="45"/></a><section class="copyright"> Copyright © 2024 Facebook Inc.</section><script>
+</div></div></div><footer class="nav-footer" id="footer"><section class="sitemap"><div class="footerSection"><h5>Docs</h5><a href="/docs/introduction">Introduction</a><a href="/docs/getting_started">Getting Started</a><a href="/tutorials/">Tutorials</a><a href="/api/">API Reference</a></div><div class="footerSection"><h5>Legal</h5><a href="https://opensource.facebook.com/legal/privacy/" target="_blank" rel="noreferrer noopener">Privacy</a><a href="https://opensource.facebook.com/legal/terms/" target="_blank" rel="noreferrer noopener">Terms</a></div><div class="footerSection"><h5>Social</h5><div class="social"><a class="github-button" href="https://github.com/pytorch/captum" data-count-href="https://github.com/pytorch/captum/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star Captum on GitHub">captum</a></div></div></section><a href="https://opensource.facebook.com/" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/img/oss_logo.png" alt="Facebook Open Source" width="170" height="45"/></a><section class="copyright"> Copyright © 2025 Facebook Inc.</section><script>
             (function() {
               var BAD_BASE = '/captum/';
               if (window.location.origin !== 'https://captum.ai') {
